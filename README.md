@@ -12,5 +12,6 @@ Code and script snippets I've found interesting and useful along the way
 | Source | Description |
 |----------|-----------|
 | [scripts: load-test.sh](/scripts/load-test.sh) | cURL loop to stress an endpoint |
+| [scripts: replay-commit.sh](/scripts/replay-commit.sh) | git cherry-pick between feature branches |
 
 
