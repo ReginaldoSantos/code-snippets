@@ -13,5 +13,6 @@ Code and script snippets I've found interesting and useful along the way
 |----------|-----------|
 | [scripts: load-test.sh](/scripts/load-test.sh) | cURL loop to stress an endpoint |
 | [scripts: replay-commit.sh](/scripts/replay-commit.sh) | git cherry-pick between feature branches |
+| [scripts: gen_oauth_keypair.sh](/scripts/gen_oauth_keypair.sh) | Generates private/public key pair ( RSA 2048 PKCS#8 ) and stores it in yml files. |
 
 
