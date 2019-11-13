@@ -97,7 +97,7 @@ do
   CMD="${CMD}s/\b$TYPE\b$OPTIONAL_ENDING/${LY_DATA_TYPES[$TYPE]}/g;"
 done;
 
-sed -r "$CMD" $INPUT_FILE > out1.txt
+sed -r "$CMD" $INPUT_FILE > out.txt
 
 # Lista com outros replacements necessários
 declare -A LY_REPLACEMENTS=(
@@ -111,6 +111,7 @@ declare -A LY_REPLACEMENTS=(
   ["CREATE TABLE Desenv_Lyceum.dbo."]="entity "
   ["\($"]="{"
   ["\)$"]="}"
+  ["LY_"]=""
 )
 
 CMD=""
@@ -122,10 +123,16 @@ do
   CMD="${CMD}s/$REPL/${LY_REPLACEMENTS[$REPL]}/g;"
 done;
 
+# remove linhas vazias
 CMD="${CMD}/^\s*$/d;"
 
-sed -r "$CMD" out1.txt > output.jdl
+# aplica camelcase em colunas com underline
+CMD="${CMD}s/^ *[^ ]+/\L&/g;s/_(.)/\U\1/g;"
 
-rm out1.txt
+sed -r "$CMD" out.txt > output.jdl
+rm out.txt
+
+# Torna entity names camel case
+#CMD="s/(CREATE TABLE Desenv_Lyceum.dbo.)(.*)(\s\()/entity \L\2\3/g;s/_(.)/\U\1/g;"
 
 echo "Done."
