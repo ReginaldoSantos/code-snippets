@@ -12,7 +12,7 @@ CURRENT_BRANCH=$( git branch | grep \* | cut -c2- )
 
 # Feature branches select by some common name without "origin/"
 FEATURE_BRANCHES=(
-  $( git branch -r | grep "feature" | cut -d'/' -f2- )
+  $( git branch -r | grep "custom" | cut -d'/' -f2- )
 )
 
 # Remove current branch
@@ -25,8 +25,18 @@ for BRANCH in "${FEATURE_BRANCHES[@]}";
 do
   echo "Applying changes to branch $BRANCH."
   git checkout $BRANCH;
-  git cherry-pick $ORIGINAL_COMMIT;
+  git cherry-pick $ORIGINAL_COMMIT --strategy=recursive --strategy-option=theirs;
+
+  if [ $? -ne 0 ]; then
+    echo "[$(basename $0)] an error has occurred during 'cherry-pick'." >&2
+    exit 1
+  fi
 done;
 
 git checkout $CURRENT_BRANCH;
 git stash pop;
+
+git for-each-ref --sort=committerdate refs/heads/ --format="%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))"
+
+echo "[$(basename $0)] script has been successfully executed."
+exit 0
